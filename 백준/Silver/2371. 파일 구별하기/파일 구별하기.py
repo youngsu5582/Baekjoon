@@ -12,9 +12,14 @@ for i in range(n):
         max_element = len(ary[i])
 
 for i in range(max_element):
-    result = set()
+    count = 0
+    temp = []
     for j in range(n):
-        result.add(tuple(ary[j][:i+1]))
-    if len(result)==n:
-        print(i+1)
-        exit(0)
+        if len(ary[j])<=i:
+            count+=1
+            continue
+        if ary[j][i] not in temp:
+            temp.append(ary[j][i])
+        if len(temp) + count==n:
+            print(i+1)
+            exit(0)
