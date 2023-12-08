@@ -1,28 +1,29 @@
-from collections import deque
 import sys
+from collections import deque
 input = sys.stdin.readline
 
-n, q = map(int, input().split())
-graph = [[] for _ in range(n+1)]
+
+n,Q = map(int,input().split())
+ary = [[]for _ in range(n+1)]
 
 for _ in range(n-1):
-    a, b, usado = (map(int, input().split()))
-    graph[a].append((b, usado))
-    graph[b].append((a, usado))
+    p,q,r = (map(int,input().split()))
+    ary[p].append((q,r))
+    ary[q].append((p,r))
 
-for i in range(q):
-    k, v = map(int, input().split())
-    visited = [False] * (n + 1)
-    visited[v] = True
-    result = 0
-    q = deque([(v, float('inf'))])
+for i in range(Q):
+    k,v = map(int,input().split())
+    visited=[False] * (n + 1)
+    visited[v]=True
+    count = 0
+    queue = deque([(v, float('inf'))])
+    while queue:
+        pos,usado = queue.pop()
 
-    while q:
-        v, usado = q.pop()
-        for next_v, next_usado in graph[v]:
-            next_usado = min(usado, next_usado)
-            if next_usado >= k and not visited[next_v]:
-                result += 1
-                q.append((next_v, next_usado))
-                visited[next_v] = True
-    print(result)
+        for new_pos,new_usado in ary[pos]:
+            new_usado = min(usado,new_usado)
+            if new_usado>=k and not visited[new_pos]:
+                count+=1
+                queue.append((new_pos,new_usado))
+                visited[new_pos]=True
+    print(count)
