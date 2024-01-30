@@ -1,8 +1,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -13,7 +15,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int unit = 1_000_000;
         List<Integer> n_k = map(Integer.class, input(br));
-        int[] ary = new int[unit+1];
+        int[] ary = new int[unit + 1];
 
         int n = n_k.get(0);
         int k = n_k.get(1);
@@ -25,24 +27,31 @@ public class Main {
             ary[x] = g;
             return x;
         }).max().orElse(0);
-        int sum = IntStream.rangeClosed(0, Math.min(2*k,unit)).map(i -> ary[i]).sum();
+        int sum = IntStream.rangeClosed(0, Math.min(2 * k, unit)).map(i -> ary[i]).sum();
 
         AtomicInteger value = new AtomicInteger(sum);
         int result = IntStream
-                .rangeClosed(k + 1,max_index-k)
+                .rangeClosed(k + 1, max_index - k)
                 .map(index -> value.getAndSet(value.get() - ary[index - k - 1] + ary[index + k]))
                 .max()
                 .orElse(0);
-        System.out.println(Math.max(value.get(),result));
+
+        System.out.println(Math.max(value.get(), result));
     }
 
     private static <T> List<T> map(Class<T> clazz, String line) {
+        StringTokenizer st = new StringTokenizer(line);
+        List<String> tokens = new ArrayList<>();
+
+        while (st.hasMoreTokens())
+            tokens.add(st.nextToken());
+
         if (clazz == Integer.class)
-            return (List<T>) Arrays.stream(line.split(" ")).map(Integer::parseInt).collect(Collectors.toList());
+            return (List<T>) tokens.stream().map(Integer::parseInt).collect(Collectors.toList());
         if (clazz == Double.class)
-            return (List<T>) Arrays.stream(line.split(" ")).map(Double::parseDouble).collect(Collectors.toList());
+            return (List<T>) tokens.stream().map(Double::parseDouble).collect(Collectors.toList());
         if (clazz == String.class)
-            return (List<T>) Arrays.stream(line.split(" ")).collect(Collectors.toList());
+            return (List<T>) tokens.stream().collect(Collectors.toList());
         return null;
     }
 
