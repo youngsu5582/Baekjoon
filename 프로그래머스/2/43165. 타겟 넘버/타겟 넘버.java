@@ -4,24 +4,19 @@ class Solution {
     int count = 0;
     public int solution(int[] numbers, int target) {
         int answer = 0;
-        dfs(numbers,new ArrayList<>(),target,0);
+        dfs(numbers,0,target,0);
         return count;
     }
     
-    public void dfs(int[] numbers,List<Integer> array,int target, int index){
+    public void dfs(int[] numbers,int sum,int target, int index){
         if(numbers.length == index){
-            if(check(array,target)){
+            if(target == sum){
                 count++;
             }
             return;
         }
-        array.add(numbers[index]);
-        dfs(numbers,array,target,index+1);
-        array.remove(array.size()-1);
-        
-        array.add(-numbers[index]);
-        dfs(numbers,array,target,index+1);
-        array.remove(array.size()-1);
+        dfs(numbers,sum+numbers[index],target,index+1);
+        dfs(numbers,sum-numbers[index],target,index+1);
     }
     
     private boolean check(List<Integer> numbers, int target){
