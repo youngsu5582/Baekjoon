@@ -10,20 +10,18 @@ class Solution {
         for(index in words.indices){
             cacheMap[words[index]] = index
         }
-        val queue = mutableListOf<String>()
+        val queue = ArrayDeque<String>()
         val visited = BooleanArray(words.size)
         queue.add(begin)
         while(queue.isNotEmpty()){
-            val itCount = queue.size
-            for(index in 0 until itCount){
+            repeat(queue.size){
                 val element = queue.removeFirst()
                 if(element==target){
                     return count
                 }
-                for(word in words){
-                    val cacheIndex = cacheMap[word]!!
-                    if(visited[cacheIndex].not() && checkRule(element,word)){
-                        visited[cacheIndex]=true
+                words.forEachIndexed{ wordIndex,word ->
+                    if(visited[wordIndex].not() && checkRule(element,word)){
+                        visited[wordIndex]=true
                         queue.add(word)
                     }
                 }
@@ -32,13 +30,8 @@ class Solution {
         }
         return 0
     }
-    private fun checkRule(first:String,second:String):Boolean{
-        val size = first.length
-        var count = 0
-        for(i in 0 until size){
-            if(first[i]!=second[i]) count++
-        }
-        return count == 1
+ private fun checkRule(a: String, b: String): Boolean {
+        return a.indices.count { a[it] != b[it] } == 1
     }
 }
 data class Element(
